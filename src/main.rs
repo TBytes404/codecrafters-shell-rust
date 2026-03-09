@@ -4,8 +4,10 @@ use std::io::{self, Write};
 const COMMAND_PROMPT: &str = "$ ";
 
 fn main() {
-    let cmd = wait_for_command();
-    println!("{}: command not found", cmd)
+    loop {
+        let cmd = wait_for_command();
+        println!("{}: command not found", cmd)
+    }
 }
 
 fn wait_for_command() -> String {

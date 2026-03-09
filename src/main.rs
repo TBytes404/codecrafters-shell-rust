@@ -3,7 +3,7 @@ use std::io::{self, Write};
 
 fn main() {
     print!("$ ");
-    // io::stdout().flush().unwrap();
+    io::stdout().flush().unwrap();
     let cmd = read_command();
     println!("{}: command not found", cmd)
 }

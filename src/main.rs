@@ -6,9 +6,12 @@ const COMMAND_PROMPT: &str = "$ ";
 
 fn main() {
     loop {
-        match read_command().deref() {
+        show_prompt(COMMAND_PROMPT);
+        let (cmd, args) = read_command();
+        match cmd.deref() {
             "exit" => break,
-            cmd => println!("{}: command not found", cmd),
+            "echo" => println!("{}", args),
+            _ => println!("{}: command not found", cmd),
         }
     }
 }
@@ -18,9 +21,13 @@ fn show_prompt(sym: &str) {
     io::stdout().flush().unwrap();
 }
 
-fn read_command() -> String {
-    show_prompt(COMMAND_PROMPT);
-    let mut cmd = String::new();
-    io::stdin().read_line(&mut cmd).unwrap();
-    cmd.trim().into()
+fn read_command() -> (String, String) {
+    let mut line = String::new();
+    io::stdin().read_line(&mut line).unwrap();
+    let line = line.trim();
+
+    match line.split_once(" ") {
+        Some((cmd, args)) => (cmd.into(), args.into()),
+        None => (line.into(), "".into()),
+    }
 }

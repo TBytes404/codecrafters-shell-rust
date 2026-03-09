@@ -1,11 +1,21 @@
 #[allow(unused_imports)]
 use std::io::{self, Write};
 
+const COMMAND_PROMPT: &str = "$ ";
+
 fn main() {
-    print!("$ ");
-    io::stdout().flush().unwrap();
-    let cmd = read_command();
+    let cmd = wait_for_command();
     println!("{}: command not found", cmd)
+}
+
+fn wait_for_command() -> String {
+    show_prompt(COMMAND_PROMPT);
+    read_command()
+}
+
+fn show_prompt(sym: &str) {
+    print!("{}", sym);
+    io::stdout().flush().unwrap();
 }
 
 fn read_command() -> String {

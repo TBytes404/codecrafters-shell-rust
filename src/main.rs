@@ -33,8 +33,8 @@ fn main() {
                 }
             }
             cmd => {
-                if let Some(exe) = find_executable(cmd) {
-                    let output = Command::new(exe).args(args.split(" ")).output().unwrap();
+                if find_executable(cmd).is_some() {
+                    let output = Command::new(cmd).args(args.split(" ")).output().unwrap();
                     println!("{}", String::from_utf8_lossy(&output.stdout))
                 } else {
                     println!("{}: command not found", cmd)

@@ -1,7 +1,7 @@
 #[allow(unused_imports)]
 use std::io::{self, Write};
 use std::{
-    env::{split_paths, var_os},
+    env::{current_dir, split_paths, var_os},
     fs::read_dir,
     ops::Deref,
     process::Command,
@@ -10,7 +10,7 @@ use std::{
 use is_executable::IsExecutable;
 
 const COMMAND_PROMPT: &str = "$ ";
-const BUILTIN_COMMANDS: [&str; 3] = ["exit", "echo", "type"];
+const BUILTIN_COMMANDS: [&str; 4] = ["exit", "echo", "type", "pwd"];
 
 fn main() {
     loop {
@@ -19,6 +19,7 @@ fn main() {
         match cmd.deref() {
             "exit" => break,
             "echo" => println!("{}", args),
+            "pwd" => println!("{}", current_dir().unwrap().display()),
             "type" => {
                 let arg = match args.split_once(" ") {
                     Some((arg, _)) => arg,

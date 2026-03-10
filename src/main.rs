@@ -39,8 +39,12 @@ fn run_executable(cmd: &str, args: &str) {
 
 fn builtin_cd(args: &str) {
     let (arg, _) = first_arg(args);
-    let path = Path::new(arg);
-    if path.exists() {
+    let path = if arg == "~" {
+        PathBuf::from(var_os("HOME").unwrap())
+    } else {
+        PathBuf::from(arg)
+    };
+    if path.is_dir() {
         set_current_dir(path).unwrap();
     } else {
         println!("cd: {}: No such file or directory", arg)

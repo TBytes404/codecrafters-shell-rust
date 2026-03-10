@@ -11,6 +11,17 @@ fn main() {
         match cmd.deref() {
             "exit" => break,
             "echo" => println!("{}", args),
+            "type" => {
+                let arg = match args.split_once(" ") {
+                    Some((arg, _)) => arg,
+                    _ => args.as_str(),
+                };
+                if ["exit", "echo", "type"].contains(&arg) {
+                    println!("{} is a builtin", arg)
+                } else {
+                    println!("{}: not found", arg)
+                }
+            }
             _ => println!("{}: command not found", cmd),
         }
     }

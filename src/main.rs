@@ -3,6 +3,7 @@ use std::io::{self, Write};
 use std::ops::Deref;
 
 const COMMAND_PROMPT: &str = "$ ";
+const BUILTIN_COMMANDS: [&str; 3] = ["exit", "echo", "type"];
 
 fn main() {
     loop {
@@ -16,7 +17,7 @@ fn main() {
                     Some((arg, _)) => arg,
                     _ => args.as_str(),
                 };
-                if ["exit", "echo", "type"].contains(&arg) {
+                if BUILTIN_COMMANDS.contains(&arg) {
                     println!("{} is a shell builtin", arg)
                 } else {
                     println!("{}: not found", arg)

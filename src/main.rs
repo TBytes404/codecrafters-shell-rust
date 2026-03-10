@@ -27,7 +27,7 @@ fn main() {
                 if BUILTIN_COMMANDS.contains(&arg) {
                     println!("{} is a shell builtin", arg)
                 } else if let Some(path) = find_executable(arg) {
-                    println!("{} is {}", arg, path)
+                    print!("{} is {}", arg, path)
                 } else {
                     println!("{}: not found", arg)
                 }

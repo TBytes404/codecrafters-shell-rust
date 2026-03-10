@@ -4,6 +4,7 @@ use std::{
     env::{split_paths, var_os},
     fs::read_dir,
     ops::Deref,
+    process::Command,
 };
 
 use is_executable::IsExecutable;
@@ -31,7 +32,14 @@ fn main() {
                     println!("{}: not found", arg)
                 }
             }
-            _ => println!("{}: command not found", cmd),
+            cmd => {
+                if let Some(exe) = find_executable(cmd) {
+                    let output = Command::new(exe).args(args.split(" ")).output().unwrap();
+                    println!("{}", String::from_utf8_lossy(&output.stdout))
+                } else {
+                    println!("{}: command not found", cmd)
+                }
+            }
         }
     }
 }

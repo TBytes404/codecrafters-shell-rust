@@ -1,9 +1,10 @@
 #[allow(unused_imports)]
 use std::io::{self, Write};
 use std::{
-    env::{current_dir, split_paths, var_os},
+    env::{current_dir, set_current_dir, split_paths, var_os},
     fs::read_dir,
     ops::Deref,
+    path::Path,
     process::Command,
 };
 
@@ -20,6 +21,18 @@ fn main() {
             "exit" => break,
             "echo" => println!("{}", args),
             "pwd" => println!("{}", current_dir().unwrap().display()),
+            "cd" => {
+                let arg = match args.split_once(" ") {
+                    Some((arg, _)) => arg,
+                    _ => args.as_str(),
+                };
+                let path = Path::new(arg);
+                if path.exists() {
+                    set_current_dir(path).unwrap();
+                } else {
+                    println!("cd: {}: No such file or directory", arg)
+                }
+            }
             "type" => {
                 let arg = match args.split_once(" ") {
                     Some((arg, _)) => arg,

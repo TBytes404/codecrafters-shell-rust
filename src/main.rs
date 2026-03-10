@@ -1,6 +1,12 @@
 #[allow(unused_imports)]
 use std::io::{self, Write};
-use std::ops::Deref;
+use std::{
+    env::{split_paths, var_os},
+    fs::read_dir,
+    ops::Deref,
+};
+
+use is_executable::IsExecutable;
 
 const COMMAND_PROMPT: &str = "$ ";
 const BUILTIN_COMMANDS: [&str; 3] = ["exit", "echo", "type"];
@@ -19,6 +25,8 @@ fn main() {
                 };
                 if BUILTIN_COMMANDS.contains(&arg) {
                     println!("{} is a shell builtin", arg)
+                } else if let Some(path) = find_executable(arg) {
+                    println!("{} is {}", arg, path)
                 } else {
                     println!("{}: not found", arg)
                 }
@@ -26,6 +34,20 @@ fn main() {
             _ => println!("{}: command not found", cmd),
         }
     }
+}
+
+fn find_executable(arg: &str) -> Option<String> {
+    let paths = { var_os("PATH").unwrap() };
+    for path in split_paths(&paths).filter(|p| p.exists()) {
+        for entry in read_dir(path).unwrap() {
+            let entry = entry.unwrap().path();
+            let file = entry.file_name().unwrap();
+            if file == arg && entry.is_executable() {
+                return Some(entry.display().to_string());
+            }
+        }
+    }
+    None
 }
 
 fn show_prompt(sym: &str) {

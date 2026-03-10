@@ -27,7 +27,7 @@ fn main() {
                 if BUILTIN_COMMANDS.contains(&arg) {
                     println!("{} is a shell builtin", arg)
                 } else if let Some(path) = find_executable(arg) {
-                    print!("{} is {}", arg, path)
+                    println!("{} is {}", arg, path)
                 } else {
                     println!("{}: not found", arg)
                 }
@@ -35,7 +35,7 @@ fn main() {
             cmd => {
                 if find_executable(cmd).is_some() {
                     let output = Command::new(cmd).args(args.split(" ")).output().unwrap();
-                    println!("{}", String::from_utf8_lossy(&output.stdout))
+                    print!("{}", String::from_utf8_lossy(&output.stdout))
                 } else {
                     println!("{}: command not found", cmd)
                 }

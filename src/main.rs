@@ -17,7 +17,7 @@ fn main() {
                     _ => args.as_str(),
                 };
                 if ["exit", "echo", "type"].contains(&arg) {
-                    println!("{} is a builtin", arg)
+                    println!("{} is a shell builtin", arg)
                 } else {
                     println!("{}: not found", arg)
                 }
